@@ -32,3 +32,8 @@ output "sqs" {
   description = "Map of SQS queues and their attributes"
   value       = module.supporting_resources.sqs
 }
+
+output "rds_proxy_connect_role_arns" {
+  description = "ARNs of the RDS proxy connect roles"
+  value       = { for this_db, this_config in module.rds : this_db => aws_iam_role.rds_proxy_connect[this_db].arn }
+}

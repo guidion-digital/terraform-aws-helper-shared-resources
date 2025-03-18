@@ -22,8 +22,9 @@ variable "vpc_config" {
   description = "VPC will be created for this application if supplied"
 
   type = object({
-    vpc_cidr = string,
-    az_count = optional(number, 3)
+    vpc_cidr           = string,
+    az_count           = optional(number, 3),
+    transit_gateway_id = optional(string, null)
   })
 
   default = null
@@ -187,11 +188,10 @@ variable "elasticache" {
   default = {}
 }
 
-variable "rds" {
-  description = "An RDS instance to create"
+variable "rds_instances" {
+  description = "Map of RDS instances to create"
 
-  type = object({
-    identifier                         = string
+  type = map(object({
     allocated_storage                  = optional(number, 20)
     max_allocated_storage              = optional(number, 120)
     storage_encrypted                  = optional(bool, true)
@@ -311,9 +311,9 @@ variable "rds" {
         }))
       })))
     }))
-  })
+  }))
 
-  default = null
+  default = {}
 }
 
 variable "ssm_parameters" {

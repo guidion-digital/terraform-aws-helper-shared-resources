@@ -1,0 +1,19 @@
+name: Tests plans
+
+on:
+  pull_request:
+    branches: [acc]
+    types: [opened, edited, synchronize]
+
+jobs:
+  test-workflow:
+    uses: guidion-digital/release-workflows/.github/workflows/github-test-workflow.yaml@v2
+    permissions:
+      pull-requests: write
+      contents: read
+
+  release-dry-run:
+    needs: test-workflow
+    uses: guidion-digital/release-workflows/.github/workflows/github-release-tag-dry-run.yaml@v2
+    with:
+      branch: ${{ github.ref_name }}

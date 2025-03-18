@@ -2,12 +2,12 @@ module "vpc" {
   count = var.vpc_config != null ? 1 : 0
 
   source  = "aws-ia/vpc/aws"
-  version = "4.3.1" # 4.3.2 has breaking change
+  version = "4.4.4"
 
   name               = local.name
   cidr_block         = var.vpc_config.vpc_cidr
   az_count           = var.vpc_config.az_count
-  transit_gateway_id = data.aws_ec2_transit_gateway.this.id
+  transit_gateway_id = var.vpc_config.transit_gateway_id
   tags               = local.tags
 
   transit_gateway_routes = {

@@ -53,5 +53,5 @@ module "secrets" {
     }
   }
 
-  tags = module.these_tags.tags
+  tags = local.tags
 }

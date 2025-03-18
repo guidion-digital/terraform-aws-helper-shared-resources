@@ -7,11 +7,12 @@ module "these_tags" {
   delimiter = "-"
 
   tags = {
-    "Terraform"   = "true",
-    "Module"      = "helper-shared-resources",
-    "project"     = var.project,
-    "application" = var.application_name,
-    "stage"       = var.stage
+    "Terraform"       = "true",
+    "Module"          = "helper-shared-resources",
+    "project"         = var.project,
+    "application"     = var.application_name,
+    "stage"           = var.stage,
+    "shared_resource" = "true"
   }
 }
 
