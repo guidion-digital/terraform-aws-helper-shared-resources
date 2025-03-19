@@ -23,10 +23,3 @@ locals {
 
   name = var.application_name
 }
-
-data "aws_ec2_transit_gateway" "this" {
-  filter {
-    name   = "state"
-    values = ["available"]
-  }
-}

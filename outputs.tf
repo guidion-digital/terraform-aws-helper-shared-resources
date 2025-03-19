@@ -8,6 +8,11 @@ output "secrets" {
   value       = module.secrets
 }
 
+output "ssm_parameters" {
+  description = "Map of SSM parameters and their attributes"
+  value       = module.ssm_parameters
+}
+
 output "rds" {
   description = "Map of RDS instances and their attributes"
   value       = module.rds

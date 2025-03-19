@@ -1,7 +1,22 @@
-<!--- One-liner explaining the purpose of this module. -->
+Part of the [Terrappy framework](https://github.com/guidion-digital/terrappy).
 
-<!--- A note on naming: See [here](https://guidiondev.atlassian.net/wiki/spaces/DIG/pages/3959947265/Terraform+Module+Naming+Convention) for our naming convention -->
+---
 
 # Usage
 
 See [examples folder](./examples).
+
+# Rationale
+
+Creates:
+
+- Elasticache (Memcached)
+- ASM Secrets
+- DynamoDB
+- RDS (MySQL)
+- SQS
+- SSM Parameters
+
+for use with the [workspaces](https://github.com/guidion-digital/terraform-tfe-infra-workspaces/blob/acc/README.md) module.
+
+Resources which can be placed in a VPC will need either `vpc_id` to be set, or `vpc_config` to be configured. If neither are given, they will fail to be created.

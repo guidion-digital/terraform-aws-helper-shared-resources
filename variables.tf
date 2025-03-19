@@ -22,9 +22,9 @@ variable "vpc_config" {
   description = "VPC will be created for this application if supplied"
 
   type = object({
-    vpc_cidr           = string,
-    az_count           = optional(number, 3),
-    transit_gateway_id = optional(string, null)
+    vpc_cidr                = string,
+    az_count                = optional(number, 3),
+    transit_gateway_enabled = optional(bool, true)
   })
 
   default = null
