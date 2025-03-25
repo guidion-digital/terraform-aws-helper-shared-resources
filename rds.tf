@@ -133,7 +133,7 @@ module "rds" {
   allow_vpc_cidr            = each.value.allow_vpc_cidr
   vpc_id                    = one(module.vpc).vpc_attributes.id
   vpc_cidr                  = one(module.vpc).vpc_attributes.cidr_block
-  vpc_security_group_ids    = var.rds.vpc_security_group_ids
+  vpc_security_group_ids    = each.value.vpc_security_group_ids
   subnet_ids                = [for _, value in one(module.vpc).private_subnet_attributes_by_az : value.id]
   create_db_subnet_group    = each.value.create_db_subnet_group
   create_db_parameter_group = each.value.create_db_parameter_group
