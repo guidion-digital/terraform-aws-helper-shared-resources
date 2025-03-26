@@ -88,7 +88,7 @@ module "rds" {
   stage                       = var.stage
   grafana_promtail_lambda_arn = var.grafana_promtail_lambda_arn
 
-  identifier = "${var.application_name}-${each.key}"
+  identifier = each.key
   db_name    = each.value.db_name
   create_db  = each.value.create_db
 
