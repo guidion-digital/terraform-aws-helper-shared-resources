@@ -118,6 +118,7 @@ module "shared_resources_x" {
   #   rds_instances = {
   #     "test-db" = {
   #       username        = "test"
+  #       allow_vpc_cidr  = true
   #       multi_az        = false
   #       purge_on_delete = true
   #

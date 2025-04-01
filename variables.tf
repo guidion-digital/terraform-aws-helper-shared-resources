@@ -6,6 +6,16 @@ variable "application_name" {
   description = "Name of the application these resources are tied to"
 }
 
+variable "namespace" {
+  description = "Used for naming and tagging. Overrides var.application_name for namespacing if supplied"
+  type        = string
+  default     = null
+}
+
+locals {
+  namespace = var.namespace != null ? var.namespace : var.application_name != null ? "/applications/${var.application_name}" : ""
+}
+
 variable "stage" {
   description = "Stage of the application these resources are tied to"
 }
