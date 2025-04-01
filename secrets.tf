@@ -43,7 +43,7 @@ module "secrets" {
   version = "~> 1.0"
 
   secrets = {
-    "applications/${var.application_name}/${each.key}" = {
+    "${local.namespace}/${each.key}" = {
       description                    = each.value.description
       kms_key_id                     = each.value.kms_key_id
       policy                         = each.value.policy

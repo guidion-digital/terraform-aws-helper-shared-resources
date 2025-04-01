@@ -56,7 +56,7 @@ data "aws_iam_policy_document" "rds_proxy" {
       "secretsmanager:DescribeSecret"
     ]
     resources = [
-      "arn:aws:secretsmanager:${var.region}:${var.account_id}:secret:applications/${var.application_name}/${var.application_name}-${each.key}-rds-password-*"
+      "arn:aws:secretsmanager:${var.region}:${var.account_id}:secret:${local.namespace}/${var.application_name}-${each.key}-rds-password-*"
     ]
   }
 }
@@ -78,7 +78,7 @@ resource "aws_iam_role_policy_attachment" "rds_proxy" {
 
 module "rds" {
   source  = "guidion-digital/helper-rds/aws"
-  version = "~> 0.0"
+  version = "~> 1.0.0"
 
   depends_on = [module.vpc]
   for_each   = var.vpc_config != null ? var.rds_instances : {}
