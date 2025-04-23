@@ -334,6 +334,7 @@ variable "ssm_parameters" {
     type           = optional(string, null)
     value          = optional(string, null)
     insecure_value = optional(string, null)
+    ignore_changes = optional(bool, false)
     key_id         = optional(string, null)
     tier           = optional(string, "standard")
     tags           = optional(map(string), {})
