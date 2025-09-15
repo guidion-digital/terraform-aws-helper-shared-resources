@@ -77,8 +77,9 @@ resource "aws_iam_role_policy_attachment" "rds_proxy" {
 }
 
 module "rds" {
-  source  = "guidion-digital/helper-rds/aws"
-  version = "~> 1.0"
+  source = "guidion-digital/helper-rds/aws"
+  # version = "~> 1.0"
+  version = "1.1.0-alpha-0.0.1"
 
   depends_on = [module.vpc]
   for_each   = var.vpc_config != null ? var.rds_instances : {}
@@ -124,6 +125,7 @@ module "rds" {
   backup_retention_period            = each.value.backup_retention_period
   apply_immediately                  = each.value.apply_immediately
   auto_minor_version_upgrade         = each.value.auto_minor_version_upgrade
+  allow_major_version_upgrade        = each.value.allow_major_version_upgrade
   blue_green_update                  = each.value.blue_green_update
   options                            = each.value.options
 

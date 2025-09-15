@@ -215,6 +215,7 @@ variable "rds_instances" {
     purge_on_delete                    = optional(bool, false)
     apply_immediately                  = optional(bool, true)
     auto_minor_version_upgrade         = optional(bool, true)
+    allow_major_version_upgrade        = optional(bool, false)
     availability_zone                  = optional(string, null)
     multi_az                           = optional(bool, true)
     blue_green_update                  = optional(map(string), {})
@@ -254,7 +255,7 @@ variable "rds_instances" {
 
     enabled_cloudwatch_logs_exports = optional(list(string), [])
     engine                          = optional(string, "mysql")
-    engine_version                  = optional(string, "8.0.36")
+    engine_version                  = optional(string, null)
     family                          = optional(string, "mysql8.0")
     major_engine_version            = optional(string, "8.0")
 
