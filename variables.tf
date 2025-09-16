@@ -217,7 +217,7 @@ variable "rds_instances" {
     allow_major_version_upgrade = optional(bool, false)
     availability_zone           = optional(string, null)
     multi_az                    = optional(bool, true)
-    blue_green_update           = optional(map(string), {})
+    blue_green_update           = optional(bool, false)
     ca_cert_identifier          = optional(string, "rds-ca-rsa2048-g1")
 
     options = optional(
