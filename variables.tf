@@ -202,23 +202,23 @@ variable "rds_instances" {
   description = "Map of RDS instances to create"
 
   type = map(object({
-    allocated_storage                  = optional(number, 20)
-    max_allocated_storage              = optional(number, 120)
-    storage_encrypted                  = optional(bool, true)
-    allow_major_engine_version_upgrade = optional(bool, false)
-    maintenance_window                 = optional(string, "sun:03:34-sun:04:04")
-    backup_window                      = optional(string, "04:18-04:48")
-    backup_retention_period            = optional(number, 7)
-    deletion_protection                = optional(bool, true)
-    delete_automated_backups           = optional(bool, true)
-    skip_final_snapshot                = optional(bool, false)
-    purge_on_delete                    = optional(bool, false)
-    apply_immediately                  = optional(bool, true)
-    auto_minor_version_upgrade         = optional(bool, true)
-    availability_zone                  = optional(string, null)
-    multi_az                           = optional(bool, true)
-    blue_green_update                  = optional(map(string), {})
-    ca_cert_identifier                 = optional(string, "rds-ca-rsa2048-g1")
+    allocated_storage           = optional(number, 20)
+    max_allocated_storage       = optional(number, 120)
+    storage_encrypted           = optional(bool, true)
+    maintenance_window          = optional(string, "sun:03:34-sun:04:04")
+    backup_window               = optional(string, "04:18-04:48")
+    backup_retention_period     = optional(number, 7)
+    deletion_protection         = optional(bool, true)
+    delete_automated_backups    = optional(bool, true)
+    skip_final_snapshot         = optional(bool, false)
+    purge_on_delete             = optional(bool, false)
+    apply_immediately           = optional(bool, true)
+    auto_minor_version_upgrade  = optional(bool, true)
+    allow_major_version_upgrade = optional(bool, false)
+    availability_zone           = optional(string, null)
+    multi_az                    = optional(bool, true)
+    blue_green_update           = optional(bool, false)
+    ca_cert_identifier          = optional(string, "rds-ca-rsa2048-g1")
 
     options = optional(
       list(object({
@@ -254,7 +254,7 @@ variable "rds_instances" {
 
     enabled_cloudwatch_logs_exports = optional(list(string), [])
     engine                          = optional(string, "mysql")
-    engine_version                  = optional(string, "8.0.36")
+    engine_version                  = optional(string, null)
     family                          = optional(string, "mysql8.0")
     major_engine_version            = optional(string, "8.0")
 

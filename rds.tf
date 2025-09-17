@@ -78,7 +78,7 @@ resource "aws_iam_role_policy_attachment" "rds_proxy" {
 
 module "rds" {
   source  = "guidion-digital/helper-rds/aws"
-  version = "~> 1.0"
+  version = "~> 1.1"
 
   depends_on = [module.vpc]
   for_each   = var.vpc_config != null ? var.rds_instances : {}
@@ -117,15 +117,15 @@ module "rds" {
   purge_on_delete          = each.value.purge_on_delete
   ca_cert_identifier       = each.value.ca_cert_identifier
 
-  replica_settings                   = each.value.replica_settings
-  allow_major_engine_version_upgrade = each.value.allow_major_engine_version_upgrade
-  maintenance_window                 = each.value.maintenance_window
-  backup_window                      = each.value.backup_window
-  backup_retention_period            = each.value.backup_retention_period
-  apply_immediately                  = each.value.apply_immediately
-  auto_minor_version_upgrade         = each.value.auto_minor_version_upgrade
-  blue_green_update                  = each.value.blue_green_update
-  options                            = each.value.options
+  replica_settings            = each.value.replica_settings
+  maintenance_window          = each.value.maintenance_window
+  backup_window               = each.value.backup_window
+  backup_retention_period     = each.value.backup_retention_period
+  apply_immediately           = each.value.apply_immediately
+  auto_minor_version_upgrade  = each.value.auto_minor_version_upgrade
+  allow_major_version_upgrade = each.value.allow_major_version_upgrade
+  blue_green_update           = each.value.blue_green_update
+  options                     = each.value.options
 
   availability_zone         = each.value.availability_zone
   multi_az                  = each.value.multi_az
