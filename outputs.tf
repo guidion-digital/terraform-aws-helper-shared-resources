@@ -19,7 +19,12 @@ output "rds" {
 }
 
 output "memcached" {
-  description = "Map of Memcached clusters and their attributes"
+  description = "DEPRECATED: Use elasticache output instead"
+  value       = module.elasticache
+}
+
+output "elasticache" {
+  description = "Map of Elasticache clusters and their attributes (both Redis and Memcached)"
   value       = module.elasticache
 }
 
