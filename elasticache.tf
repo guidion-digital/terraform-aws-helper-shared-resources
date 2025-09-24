@@ -1,6 +1,6 @@
 module "elasticache" {
   source  = "guidion-digital/helper-elasticache/aws"
-  version = "0.0.5"
+  version = "0.0.6-alpha-0.0.1"
 
   for_each = var.elasticache
 
