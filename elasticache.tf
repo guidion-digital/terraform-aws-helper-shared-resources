@@ -1,6 +1,6 @@
 module "elasticache" {
   source  = "guidion-digital/helper-elasticache/aws"
-  version = "0.0.6"
+  version = "0.0.7-alpha-0.0.1"
 
   for_each = var.elasticache
 
@@ -29,4 +29,5 @@ module "elasticache" {
   security_group_rules         = each.value.security_group_rules
   security_group_ids           = each.value.security_group_ids
   allowed_cidrs                = each.value.allowed_cidrs
+  num_cache_nodes              = each.value.num_cache_nodes
 }
