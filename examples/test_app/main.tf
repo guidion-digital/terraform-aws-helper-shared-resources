@@ -2,16 +2,24 @@ variable "application_name" { default = "test-app" }
 variable "project" { default = "constr" }
 variable "stage" { default = "development" }
 variable "grafana_promtail_lambda_arn" { default = "arn:aws:lambda:eu-central-1:000000000000:function:grafana-promtail-lambda" }
-# Commented out because it's not used for tests
-# variable "vpc_config" {
-#   default = {
-#     vpc_cidr                = "10.126.2.0/24"
-#     transit_gateway_enabled = false
-#   }
-# }
+variable "vpc_config" {
+  default = {
+    vpc_cidr                = "10.126.2.0/24"
+    transit_gateway_enabled = false
+  }
+}
 
 data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "< 6"
+    }
+  }
+}
 
 provider "aws" {
   region = "eu-central-1"
@@ -32,9 +40,8 @@ module "shared_resources_x" {
   # Optional variables
   # If provided, matching resources will be created.
 
-  # Commented out because it's not used for tests
   # Some resources such as RDS require the creation of a VPC, so vpc_config must also be passed if creating those or they will be skipped
-  # vpc_config = var.vpc_config
+  vpc_config = var.vpc_config
 
   secrets = {
     "ihaveaterriblepassword" = {
@@ -123,9 +130,8 @@ module "shared_resources_x" {
 
   rds_instances = {
     "test-db" = {
-      username = "test"
-      # Commented out because it's not used for tests
-      # allow_vpc_cidr  = true
+      username        = "test"
+      allow_vpc_cidr  = true
       multi_az        = false
       purge_on_delete = true
 
@@ -168,10 +174,9 @@ output "rds" {
   value = module.shared_resources_x.rds
 }
 
-# Commented out because it's not used for tests
-# output "vpc" {
-#   value = module.shared_resources_x.vpc
-# }
+output "vpc" {
+  value = module.shared_resources_x.vpc
+}
 
 output "rds_proxy_connect_role_arns" {
   value = module.shared_resources_x.rds_proxy_connect_role_arns
