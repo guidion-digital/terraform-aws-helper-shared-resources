@@ -13,6 +13,10 @@ variable "grafana_promtail_lambda_arn" { default = "arn:aws:lambda:eu-central-1:
 data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
 
+provider "aws" {
+  region = "eu-central-1"
+}
+
 module "shared_resources_x" {
   source = "../../"
 
