@@ -1,19 +1,18 @@
-name: Tests plans
+name: Release new version of examples pass
 
 on:
-  pull_request:
+  push:
     branches: [acc]
-    types: [opened, edited, synchronize]
 
 jobs:
-  tests-plan:
+  test_and_release:
     concurrency:
       group: "acc"
       cancel-in-progress: false
-    uses: guidion-digital/terrappy/.github/workflows/tf-module-pr-planner.yaml@v1
+
+    uses: guidion-digital/terrappy/.github/workflows/tf-module-releaser.yaml@v1
     permissions:
-      contents: read
-      pull-requests: write
+      contents: write
     with:
       environment_variables: |
         AWS_ACCESS_KEY_ID=${{ vars.MODULE_TESTER_AWS_ACCESS_KEY_ID }}
