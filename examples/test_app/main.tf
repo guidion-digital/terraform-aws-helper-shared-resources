@@ -12,6 +12,19 @@ variable "vpc_config" {
 data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
 
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "< 6"
+    }
+  }
+}
+
+provider "aws" {
+  region = "eu-central-1"
+}
+
 module "shared_resources_x" {
   source = "../../"
 
@@ -24,7 +37,10 @@ module "shared_resources_x" {
   project                        = var.project
   grafana_promtail_lambda_arn    = var.grafana_promtail_lambda_arn
 
-  # Optional variables. If provided, matching resources will be created. Some resources such as RDS require the creation of a VPC, so vpc_config must also be passed if creating those or they will be skipped
+  # Optional variables
+  # If provided, matching resources will be created.
+
+  # Some resources such as RDS require the creation of a VPC, so vpc_config must also be passed if creating those or they will be skipped
   vpc_config = var.vpc_config
 
   secrets = {
@@ -61,32 +77,31 @@ module "shared_resources_x" {
     }
   }
 
-  # Not supported by Localstack, but this is how it's used :)
-  #   dynamodb_tables = {
-  #     "test-table" = {
-  #       attributes = [
-  #         { name = "id", type = "N" },
-  #         { name = "createdAt", type = "S" },
-  #         { name = "gsi1", type = "N" }
-  #       ],
-  #       hash_key  = "id",
-  #       range_key = "createdAt",
-  #
-  #       global_secondary_indexes = [
-  #         {
-  #           name               = "createdAtIndex",
-  #           hash_key           = "createdAt",
-  #           range_key          = "gsi1",
-  #           non_key_attributes = ["id"],
-  #           autoscaling = {
-  #             read_max_capacity = 25
-  #           }
-  #         }
-  #       ]
-  #
-  #       ttl_attribute_name = "expiresAt",
-  #     }
-  #   }
+  dynamodb_tables = {
+    "test-table" = {
+      attributes = [
+        { name = "id", type = "N" },
+        { name = "createdAt", type = "S" },
+        { name = "gsi1", type = "N" }
+      ],
+      hash_key  = "id",
+      range_key = "createdAt",
+
+      global_secondary_indexes = [
+        {
+          name               = "createdAtIndex",
+          hash_key           = "createdAt",
+          range_key          = "gsi1",
+          non_key_attributes = ["id"],
+          autoscaling = {
+            read_max_capacity = 25
+          }
+        }
+      ]
+
+      ttl_attribute_name = "expiresAt",
+    }
+  }
 
   sqs_queues = {
     "test-queue" = {
@@ -101,36 +116,34 @@ module "shared_resources_x" {
     }
   }
 
-  # Not supported by Localstack, but this is how it's used :)
-  # elasticache = {
-  #   "memcached-01" = {
-  #     application_name = var.application_name
-  #     project          = var.project
-  #     stage            = var.stage
-  #     engine           = "memcached"
-  #     engine_version   = "1.6.17"
-  #     node_type        = "cache.t3.micro"
-  #     az_mode          = "single-az"
-  #   }
-  # }
+  elasticache = {
+    "memcached-01" = {
+      application_name = var.application_name
+      project          = var.project
+      stage            = var.stage
+      engine           = "memcached"
+      engine_version   = "1.6.17"
+      node_type        = "cache.t3.micro"
+      az_mode          = "single-az"
+    }
+  }
 
-  # 30 minutes is too long for tests to run! but this is how it's used :)
-  #   rds_instances = {
-  #     "test-db" = {
-  #       username        = "test"
-  #       allow_vpc_cidr  = true
-  #       multi_az        = false
-  #       purge_on_delete = true
-  #
-  #       proxy_settings = {
-  #         enabled = true
-  #       }
-  #
-  #       replica_settings = {
-  #         enabled = false
-  #       }
-  #     }
-  #   }
+  rds_instances = {
+    "test-db" = {
+      username        = "test"
+      allow_vpc_cidr  = true
+      multi_az        = false
+      purge_on_delete = true
+
+      proxy_settings = {
+        enabled = true
+      }
+
+      replica_settings = {
+        enabled = false
+      }
+    }
+  }
 }
 
 output "secrets" {
