@@ -5,7 +5,7 @@ on:
     branches: [acc]
 
 jobs:
-  test_and_release:
+  test-and-release:
     concurrency:
       group: "acc"
       cancel-in-progress: false
