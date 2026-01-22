@@ -326,6 +326,189 @@ variable "rds_instances" {
   default = {}
 }
 
+variable "redshift_instances" {
+  description = "Map of Redshift clusters to create"
+
+  type = map(object({
+    database_name   = optional(string, null)
+    master_username = optional(string, "awsuser")
+
+    manage_master_password                          = optional(bool, true)
+    manage_master_password_rotation                 = optional(bool, false)
+    master_password_wo                               = optional(string, null)
+    master_password_wo_version                       = optional(string, null)
+    master_password_secret_kms_key_id                = optional(string, null)
+    master_password_rotate_immediately               = optional(bool, null)
+    master_password_rotation_automatically_after_days = optional(number, null)
+    master_password_rotation_duration                = optional(string, null)
+    master_password_rotation_schedule_expression     = optional(string, null)
+
+    allow_version_upgrade = optional(bool, false)
+    apply_immediately     = optional(bool, false)
+    cluster_version       = optional(string, null)
+
+    node_type            = optional(string, "ra3.large")
+    number_of_nodes      = optional(number, 2)
+    multi_az             = optional(bool, null)
+    publicly_accessible  = optional(bool, true)
+    enhanced_vpc_routing = optional(bool, true)
+    availability_zone    = optional(string, null)
+    availability_zone_relocation_enabled = optional(bool, null)
+
+    port                         = optional(number, 5439)
+    preferred_maintenance_window = optional(string, "sat:10:00-sat:10:30")
+
+    automated_snapshot_retention_period = optional(number, null)
+    manual_snapshot_retention_period    = optional(number, null)
+    skip_final_snapshot                 = optional(bool, true)
+    final_snapshot_identifier           = optional(string, null)
+
+    encrypted   = optional(bool, null)
+    kms_key_arn = optional(string, null)
+
+    vpc_id = optional(string, null)
+
+    create_security_group      = optional(bool, true)
+    security_group_name        = optional(string, null)
+    security_group_description = optional(string, null)
+    security_group_ingress_rules = optional(map(object({
+      name = optional(string)
+
+      cidr_ipv4                    = optional(string)
+      cidr_ipv6                    = optional(string)
+      description                  = optional(string)
+      from_port                    = optional(number)
+      ip_protocol                  = optional(string, "tcp")
+      prefix_list_id               = optional(string)
+      referenced_security_group_id = optional(string)
+      region                       = optional(string)
+      tags                         = optional(map(string), {})
+      to_port                      = optional(number)
+    })), {})
+    security_group_egress_rules = optional(map(object({
+      name = optional(string)
+
+      cidr_ipv4                    = optional(string)
+      cidr_ipv6                    = optional(string)
+      description                  = optional(string)
+      from_port                    = optional(number)
+      ip_protocol                  = optional(string, "tcp")
+      prefix_list_id               = optional(string)
+      referenced_security_group_id = optional(string)
+      region                       = optional(string)
+      tags                         = optional(map(string), {})
+      to_port                      = optional(number)
+    })), {})
+    security_group_tags            = optional(map(string), {})
+    security_group_use_name_prefix = optional(bool, true)
+    vpc_security_group_ids         = optional(list(string), [])
+
+    create_subnet_group      = optional(bool, true)
+    subnet_ids               = optional(list(string), null)
+    subnet_group_name        = optional(string, null)
+    subnet_group_description = optional(string, null)
+    subnet_group_tags        = optional(map(string), {})
+
+    create_parameter_group      = optional(bool, true)
+    parameter_group_name        = optional(string, null)
+    parameter_group_description = optional(string, null)
+    parameter_group_family      = optional(string, "redshift-2.0")
+    parameter_group_parameters = optional(list(object({
+      name  = string
+      value = string
+    })), null)
+    parameter_group_tags = optional(map(string), {})
+
+    create_cloudwatch_log_group           = optional(bool, false)
+    cloudwatch_log_group_retention_in_days = optional(number, 0)
+    cloudwatch_log_group_kms_key_id       = optional(string, null)
+    cloudwatch_log_group_skip_destroy     = optional(bool, null)
+    cloudwatch_log_group_tags             = optional(map(string), {})
+
+    logging = optional(object({
+      bucket_name          = optional(string)
+      log_destination_type = optional(string)
+      log_exports          = optional(list(string))
+      s3_key_prefix        = optional(string)
+    }), null)
+
+    snapshot_copy = optional(object({
+      destination_region               = string
+      manual_snapshot_retention_period = optional(number)
+      retention_period                 = optional(number)
+      grant_name                       = optional(string)
+    }), null)
+
+    snapshot_schedule = optional(object({
+      definitions   = list(string)
+      description   = optional(string)
+      force_destroy = optional(bool)
+      use_prefix    = optional(bool, false)
+      identifier    = optional(string)
+      tags          = optional(map(string), {})
+    }), null)
+
+    endpoint_access = optional(map(object({
+      name                   = optional(string)
+      resource_owner         = optional(string)
+      subnet_group_name      = string
+      vpc_security_group_ids = optional(list(string))
+    })), {})
+
+    authentication_profiles = optional(map(object({
+      name    = optional(string)
+      content = any
+    })), {})
+
+    usage_limits = optional(map(object({
+      amount        = number
+      breach_action = optional(string)
+      feature_type  = string
+      limit_type    = optional(string)
+      period        = optional(string)
+      tags          = optional(map(string), {})
+    })), {})
+
+    create_scheduled_action_iam_role = optional(bool, false)
+    scheduled_actions = optional(map(object({
+      name        = optional(string)
+      description = optional(string)
+      enable      = optional(bool)
+      start_time  = optional(string)
+      end_time    = optional(string)
+      schedule    = string
+      iam_role    = optional(string)
+      target_action = object({
+        pause_cluster = optional(bool, false)
+        resize_cluster = optional(object({
+          classic         = optional(bool)
+          cluster_type    = optional(string)
+          node_type       = optional(string)
+          number_of_nodes = optional(number)
+        }))
+        resume_cluster = optional(bool, false)
+      })
+    })), {})
+
+    iam_role_arns                 = optional(list(string), [])
+    default_iam_role_arn          = optional(string, null)
+    iam_role_name                 = optional(string, null)
+    iam_role_description          = optional(string, null)
+    iam_role_path                 = optional(string, null)
+    iam_role_permissions_boundary = optional(string, null)
+    iam_role_tags                 = optional(map(string), {})
+    iam_role_use_name_prefix      = optional(bool, true)
+
+    cluster_timeouts = optional(object({
+      create = optional(string)
+      update = optional(string)
+      delete = optional(string)
+    }), null)
+  }))
+
+  default = {}
+}
+
 variable "ssm_parameters" {
   description = "Map of SSM parameters, and their configuration"
 
