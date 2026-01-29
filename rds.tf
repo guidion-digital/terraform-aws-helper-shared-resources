@@ -78,7 +78,7 @@ resource "aws_iam_role_policy_attachment" "rds_proxy" {
 
 module "rds" {
   source  = "guidion-digital/helper-rds/aws"
-  version = "~> 1.1"
+  version = "2.0.0-alpha"
 
   depends_on = [module.vpc]
   for_each   = var.vpc_config != null ? var.rds_instances : {}
