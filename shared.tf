@@ -24,5 +24,6 @@ locals {
   # actually this
   tags = { for k, v in module.these_tags.tags : k => v if k != "Name" }
 
+
   name = var.application_name
 }
