@@ -32,7 +32,7 @@ module "shared_resources_x" {
   application_name               = var.application_name
   namespace_supporting_resources = true
   stage                          = var.stage
-  region                         = data.aws_region.current.name
+  region                         = data.aws_region.current.region
   account_id                     = data.aws_caller_identity.current.account_id
   project                        = var.project
   grafana_promtail_lambda_arn    = var.grafana_promtail_lambda_arn
