@@ -9,6 +9,7 @@ jobs:
     concurrency:
       group: "acc"
       cancel-in-progress: false
+
     uses: guidion-digital/terrappy/.github/workflows/tf-module-releaser.yaml@v2
     permissions:
       contents: write

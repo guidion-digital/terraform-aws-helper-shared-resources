@@ -325,7 +325,6 @@ variable "rds_instances" {
 
   default = {}
 }
-
 variable "ssm_parameters" {
   description = "Map of SSM parameters, and their configuration"
 
