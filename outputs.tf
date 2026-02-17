@@ -18,11 +18,6 @@ output "rds" {
   value       = module.rds
 }
 
-output "redshift" {
-  description = "Map of Redshift clusters and their attributes"
-  value       = module.redshift
-}
-
 output "memcached" {
   description = "DEPRECATED: Use elasticache output instead"
   value       = module.elasticache
