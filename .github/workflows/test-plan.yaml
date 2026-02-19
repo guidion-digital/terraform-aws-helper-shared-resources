@@ -15,3 +15,5 @@ jobs:
       contents: read
       pull-requests: write
     secrets: inherit
+    with:
+      tfc_deployer_container_version: 0.1.2-tf1.11.4
