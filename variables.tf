@@ -255,8 +255,8 @@ variable "rds_instances" {
     enabled_cloudwatch_logs_exports = optional(list(string), [])
     engine                          = optional(string, "mysql")
     engine_version                  = optional(string, null)
-    family                          = optional(string, "mysql8.0")
-    major_engine_version            = optional(string, "8.0")
+    family                          = optional(string, "mysql8.4")
+    major_engine_version            = optional(string, "8.4")
 
     port           = optional(number, 3306)
     instance_class = optional(string, "db.t3.micro")
