@@ -1,6 +1,6 @@
 module "supporting_resources" {
   source  = "guidion-digital/helper-supporting-resources/aws"
-  version = "2.1.0"
+  version = "~> 3.0"
 
   namespacing_enabled = var.namespace_supporting_resources
   application_name    = var.application_name

@@ -10,13 +10,10 @@ jobs:
     concurrency:
       group: "acc"
       cancel-in-progress: false
-    uses: guidion-digital/terrappy/.github/workflows/tf-module-pr-planner.yaml@v1
+    uses: guidion-digital/terrappy/.github/workflows/tf-module-pr-planner.yaml@v2
     permissions:
       contents: read
       pull-requests: write
+    secrets: inherit
     with:
-      environment_variables: |
-        AWS_ACCESS_KEY_ID=${{ vars.MODULE_TESTER_AWS_ACCESS_KEY_ID }}
-    secrets:
-      environment_secrets: |
-        AWS_SECRET_ACCESS_KEY=${{ secrets.MODULE_TESTER_AWS_SECRET_ACCESS_KEY }}
+      tfc_deployer_container_version: 0.1.2-tf1.11.4
