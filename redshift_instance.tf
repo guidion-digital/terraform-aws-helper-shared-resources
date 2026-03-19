@@ -37,47 +37,44 @@ module "redshift" {
 
   automated_snapshot_retention_period = each.value.automated_snapshot_retention_period
   manual_snapshot_retention_period    = each.value.manual_snapshot_retention_period
-  skip_final_snapshot                  = each.value.skip_final_snapshot
-  final_snapshot_identifier            = each.value.final_snapshot_identifier
+  skip_final_snapshot                 = each.value.skip_final_snapshot
+  final_snapshot_identifier           = each.value.final_snapshot_identifier
+  snapshot_arn                        = each.value.snapshot_arn
+  owner_account                       = each.value.owner_account
 
   encrypted   = each.value.encrypted
   kms_key_arn = each.value.kms_key_arn
+  tags        = merge(local.tags, each.value.tags)
 
-  vpc_id = each.value.vpc_id != null ? each.value.vpc_id : one(module.vpc).vpc_attributes.id
+  vpc_id = one(module.vpc).vpc_attributes.id
 
-  create_security_group          = each.value.create_security_group
-  security_group_name            = each.value.security_group_name
-  security_group_description     = each.value.security_group_description
-  security_group_ingress_rules   = each.value.security_group_ingress_rules
-  security_group_egress_rules    = each.value.security_group_egress_rules
-  security_group_tags            = each.value.security_group_tags
-  security_group_use_name_prefix = each.value.security_group_use_name_prefix
-  vpc_security_group_ids         = each.value.vpc_security_group_ids
+  create_security_group  = false
+  vpc_security_group_ids = each.value.vpc_security_group_ids
 
   create_subnet_group      = each.value.create_subnet_group
-  subnet_ids               = each.value.subnet_ids != null ? each.value.subnet_ids : [for _, value in one(module.vpc).private_subnet_attributes_by_az : value.id]
+  subnet_ids               = [for _, value in one(module.vpc).private_subnet_attributes_by_az : value.id]
   subnet_group_name        = each.value.subnet_group_name
   subnet_group_description = each.value.subnet_group_description
-  subnet_group_tags        = each.value.subnet_group_tags
+  subnet_group_tags        = merge(local.tags, each.value.subnet_group_tags)
 
   create_parameter_group      = each.value.create_parameter_group
   parameter_group_name        = each.value.parameter_group_name
   parameter_group_description = each.value.parameter_group_description
   parameter_group_family      = each.value.parameter_group_family
   parameter_group_parameters  = each.value.parameter_group_parameters
-  parameter_group_tags        = each.value.parameter_group_tags
+  parameter_group_tags        = merge(local.tags, each.value.parameter_group_tags)
 
   create_cloudwatch_log_group            = each.value.create_cloudwatch_log_group
   cloudwatch_log_group_retention_in_days = each.value.cloudwatch_log_group_retention_in_days
   cloudwatch_log_group_kms_key_id        = each.value.cloudwatch_log_group_kms_key_id
   cloudwatch_log_group_skip_destroy      = each.value.cloudwatch_log_group_skip_destroy
-  cloudwatch_log_group_tags              = each.value.cloudwatch_log_group_tags
+  cloudwatch_log_group_tags              = merge(local.tags, each.value.cloudwatch_log_group_tags)
 
   logging           = each.value.logging
   snapshot_copy     = each.value.snapshot_copy
   snapshot_schedule = each.value.snapshot_schedule
 
-  endpoint_access          = each.value.endpoint_access
+  endpoint_access         = each.value.endpoint_access
   authentication_profiles = each.value.authentication_profiles
   usage_limits            = each.value.usage_limits
 
@@ -89,7 +86,7 @@ module "redshift" {
   iam_role_description             = each.value.iam_role_description
   iam_role_path                    = each.value.iam_role_path
   iam_role_permissions_boundary    = each.value.iam_role_permissions_boundary
-  iam_role_tags                    = each.value.iam_role_tags
+  iam_role_tags                    = merge(local.tags, each.value.iam_role_tags)
   iam_role_use_name_prefix         = each.value.iam_role_use_name_prefix
 
   cluster_timeouts = each.value.cluster_timeouts

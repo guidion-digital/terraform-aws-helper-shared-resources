@@ -28,16 +28,27 @@ variable "region" {
   description = "Region of the application these resources are tied to"
 }
 
+
 variable "vpc_config" {
   description = "VPC will be created for this application if supplied"
 
   type = object({
     vpc_cidr                = string,
     az_count                = optional(number, 3),
-    transit_gateway_enabled = optional(bool, true)
+    transit_gateway_enabled = optional(bool, true),
+    public_subnet_enabled   = optional(bool, false)
   })
 
   default = null
+}
+
+variable "public_subnet_prefix_list_entries" {
+  description = "Entries to add to a managed prefix list, routed from public subnet route tables via transit gateway"
+  type = list(object({
+    cidr        = string
+    description = optional(string, null)
+  }))
+  default = []
 }
 
 variable "grafana_promtail_lambda_arn" {
@@ -326,6 +337,7 @@ variable "rds_instances" {
   default = {}
 }
 
+
 variable "redshift_instances" {
   description = "Map of Redshift clusters to create"
 
@@ -333,26 +345,26 @@ variable "redshift_instances" {
     database_name   = optional(string, null)
     master_username = optional(string, "awsuser")
 
-    manage_master_password                          = optional(bool, true)
-    manage_master_password_rotation                 = optional(bool, false)
-    master_password_wo                               = optional(string, null)
-    master_password_wo_version                       = optional(string, null)
-    master_password_secret_kms_key_id                = optional(string, null)
-    master_password_rotate_immediately               = optional(bool, null)
+    manage_master_password                            = optional(bool, true)
+    manage_master_password_rotation                   = optional(bool, false)
+    master_password_wo                                = optional(string, null)
+    master_password_wo_version                        = optional(string, null)
+    master_password_secret_kms_key_id                 = optional(string, null)
+    master_password_rotate_immediately                = optional(bool, null)
     master_password_rotation_automatically_after_days = optional(number, null)
-    master_password_rotation_duration                = optional(string, null)
-    master_password_rotation_schedule_expression     = optional(string, null)
+    master_password_rotation_duration                 = optional(string, null)
+    master_password_rotation_schedule_expression      = optional(string, null)
 
     allow_version_upgrade = optional(bool, false)
     apply_immediately     = optional(bool, false)
     cluster_version       = optional(string, null)
 
-    node_type            = optional(string, "ra3.large")
-    number_of_nodes      = optional(number, 2)
-    multi_az             = optional(bool, null)
-    publicly_accessible  = optional(bool, true)
-    enhanced_vpc_routing = optional(bool, true)
-    availability_zone    = optional(string, null)
+    node_type                            = optional(string, "ra3.large")
+    number_of_nodes                      = optional(number, 2)
+    multi_az                             = optional(bool, null)
+    publicly_accessible                  = optional(bool, true)
+    enhanced_vpc_routing                 = optional(bool, true)
+    availability_zone                    = optional(string, null)
     availability_zone_relocation_enabled = optional(bool, null)
 
     port                         = optional(number, 5439)
@@ -362,46 +374,14 @@ variable "redshift_instances" {
     manual_snapshot_retention_period    = optional(number, null)
     skip_final_snapshot                 = optional(bool, true)
     final_snapshot_identifier           = optional(string, null)
+    snapshot_arn                        = optional(string, null)
+    owner_account                       = optional(string, null)
 
     encrypted   = optional(bool, null)
     kms_key_arn = optional(string, null)
+    tags        = optional(map(string), {})
 
-    vpc_id = optional(string, null)
-
-    create_security_group      = optional(bool, true)
-    security_group_name        = optional(string, null)
-    security_group_description = optional(string, null)
-    security_group_ingress_rules = optional(map(object({
-      name = optional(string)
-
-      cidr_ipv4                    = optional(string)
-      cidr_ipv6                    = optional(string)
-      description                  = optional(string)
-      from_port                    = optional(number)
-      ip_protocol                  = optional(string, "tcp")
-      prefix_list_id               = optional(string)
-      referenced_security_group_id = optional(string)
-      region                       = optional(string)
-      tags                         = optional(map(string), {})
-      to_port                      = optional(number)
-    })), {})
-    security_group_egress_rules = optional(map(object({
-      name = optional(string)
-
-      cidr_ipv4                    = optional(string)
-      cidr_ipv6                    = optional(string)
-      description                  = optional(string)
-      from_port                    = optional(number)
-      ip_protocol                  = optional(string, "tcp")
-      prefix_list_id               = optional(string)
-      referenced_security_group_id = optional(string)
-      region                       = optional(string)
-      tags                         = optional(map(string), {})
-      to_port                      = optional(number)
-    })), {})
-    security_group_tags            = optional(map(string), {})
-    security_group_use_name_prefix = optional(bool, true)
-    vpc_security_group_ids         = optional(list(string), [])
+    vpc_security_group_ids = optional(list(string), [])
 
     create_subnet_group      = optional(bool, true)
     subnet_ids               = optional(list(string), null)
@@ -419,11 +399,11 @@ variable "redshift_instances" {
     })), null)
     parameter_group_tags = optional(map(string), {})
 
-    create_cloudwatch_log_group           = optional(bool, false)
+    create_cloudwatch_log_group            = optional(bool, false)
     cloudwatch_log_group_retention_in_days = optional(number, 0)
-    cloudwatch_log_group_kms_key_id       = optional(string, null)
-    cloudwatch_log_group_skip_destroy     = optional(bool, null)
-    cloudwatch_log_group_tags             = optional(map(string), {})
+    cloudwatch_log_group_kms_key_id        = optional(string, null)
+    cloudwatch_log_group_skip_destroy      = optional(bool, null)
+    cloudwatch_log_group_tags              = optional(map(string), {})
 
     logging = optional(object({
       bucket_name          = optional(string)
