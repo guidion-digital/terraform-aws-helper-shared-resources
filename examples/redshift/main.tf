@@ -5,7 +5,8 @@ variable "grafana_promtail_lambda_arn" { default = "arn:aws:lambda:eu-central-1:
 variable "vpc_config" {
   default = {
     vpc_cidr                = "10.126.3.0/24"
-    transit_gateway_enabled = false
+    transit_gateway_enabled = true
+    public_subnet_enabled   = true
   }
 }
 
@@ -16,7 +17,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "< 6"
+      version = ">= 6"
     }
   }
 }
@@ -32,7 +33,7 @@ module "shared_resources" {
   application_name               = var.application_name
   namespace_supporting_resources = true
   stage                          = var.stage
-  region                         = data.aws_region.current.name
+  region                         = data.aws_region.current.region
   account_id                     = data.aws_caller_identity.current.account_id
   project                        = var.project
   grafana_promtail_lambda_arn    = var.grafana_promtail_lambda_arn
@@ -43,7 +44,7 @@ module "shared_resources" {
   redshift_instances = {
     "example" = {
       node_type              = "ra3.large"
-      number_of_nodes        = 2
+      number_of_nodes        = 1
       publicly_accessible    = true
       enhanced_vpc_routing   = true
       allow_version_upgrade  = false
@@ -55,10 +56,10 @@ module "shared_resources" {
   }
 }
 
-
-output "redshift" {
-  value = module.shared_resources.redshift
-}
+# Disabled because it contains sensitive values
+# output "redshift" {
+#   value = module.shared_resources.redshift
+# }
 
 output "vpc" {
   value = module.shared_resources.vpc
