@@ -1,4 +1,9 @@
 resource "aws_eip" "redshift_public_ip" {
+  for_each = {
+    for key, instance in var.redshift_instances : key => instance
+    if var.vpc_config != null && instance.publicly_accessible
+  }
+
   domain = "vpc"
 }
 
@@ -32,6 +37,7 @@ module "redshift" {
   number_of_nodes                      = each.value.number_of_nodes
   multi_az                             = each.value.multi_az
   publicly_accessible                  = each.value.publicly_accessible
+  elastic_ip                           = each.value.publicly_accessible ? aws_eip.redshift_public_ip[each.key].public_ip : null
   enhanced_vpc_routing                 = each.value.enhanced_vpc_routing
   availability_zone                    = each.value.availability_zone
   availability_zone_relocation_enabled = each.value.availability_zone_relocation_enabled
