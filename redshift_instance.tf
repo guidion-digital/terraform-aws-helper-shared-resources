@@ -61,8 +61,12 @@ module "redshift" {
   create_security_group  = false
   vpc_security_group_ids = each.value.vpc_security_group_ids
 
-  create_subnet_group      = each.value.create_subnet_group
-  subnet_ids               = [for _, value in one(module.vpc).public_subnet_attributes_by_az : value.id]
+  create_subnet_group = each.value.create_subnet_group
+  subnet_ids = each.value.subnet_ids != null ? each.value.subnet_ids : (
+    each.value.publicly_accessible
+    ? [for _, value in one(module.vpc).public_subnet_attributes_by_az : value.id]
+    : [for _, value in one(module.vpc).private_subnet_attributes_by_az : value.id]
+  )
   subnet_group_name        = each.value.subnet_group_name
   subnet_group_description = each.value.subnet_group_description
   subnet_group_tags        = merge(local.tags, each.value.subnet_group_tags)

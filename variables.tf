@@ -36,7 +36,8 @@ variable "vpc_config" {
     vpc_cidr                = string,
     az_count                = optional(number, 3),
     transit_gateway_enabled = optional(bool, true),
-    public_subnet_enabled   = optional(bool, false)
+    public_subnet_enabled   = optional(bool, false),
+    private_subnet_enabled  = optional(bool, true)
   })
 
   default = null
