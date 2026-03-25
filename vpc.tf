@@ -1,10 +1,11 @@
 locals {
   transit_gateway_enabled = var.vpc_config != null ? var.vpc_config.transit_gateway_enabled : false
-  public_subnet_enabled   = var.vpc_config != null ? var.vpc_config.public_subnet_enabled   : false
+  public_subnet_enabled   = var.vpc_config != null ? var.vpc_config.public_subnet_enabled : false
+  private_subnet_enabled  = var.vpc_config != null ? var.vpc_config.private_subnet_enabled : false
   vpc_azs = var.vpc_config != null ? (
     var.vpc_config.az_count != null
-      ? slice(data.aws_availability_zones.current.names, 0, var.vpc_config.az_count)
-      : data.aws_availability_zones.current.names
+    ? slice(data.aws_availability_zones.current.names, 0, var.vpc_config.az_count)
+    : data.aws_availability_zones.current.names
   ) : []
 }
 
@@ -42,11 +43,12 @@ module "vpc" {
       public = {
         netmask = 26
       }
-      } : {
+    } : {},
+    local.private_subnet_enabled ? {
       private = {
         netmask = 26
       }
-    },
+    } : {},
     var.vpc_config.transit_gateway_enabled ? {
       transit_gateway = {
         netmask                                         = 28
@@ -85,7 +87,7 @@ resource "aws_route" "public_subnet_prefix_list_routes" {
     var.vpc_config != null &&
     local.public_subnet_enabled &&
     local.transit_gateway_enabled
-  ) ? {
+    ) ? {
     for az in local.vpc_azs : az => az
   } : {}
 

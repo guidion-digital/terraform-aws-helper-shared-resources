@@ -7,6 +7,7 @@ variable "vpc_config" {
     vpc_cidr                = "10.126.3.0/24"
     transit_gateway_enabled = true
     public_subnet_enabled   = true
+    private_subnet_enabled  = false
   }
 }
 
