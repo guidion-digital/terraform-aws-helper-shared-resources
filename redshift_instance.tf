@@ -58,8 +58,10 @@ module "redshift" {
 
   vpc_id = one(module.vpc).vpc_attributes.id
 
-  create_security_group  = false
-  vpc_security_group_ids = each.value.vpc_security_group_ids
+  create_security_group = false
+  # Avoid passing an empty list to the Redshift ModifyCluster API on re-apply.
+  # An empty list is treated as an explicit update and Redshift rejects it.
+  vpc_security_group_ids = length(each.value.vpc_security_group_ids) > 0 ? each.value.vpc_security_group_ids : null
 
   create_subnet_group = each.value.create_subnet_group
   subnet_ids = each.value.subnet_ids != null ? each.value.subnet_ids : (
