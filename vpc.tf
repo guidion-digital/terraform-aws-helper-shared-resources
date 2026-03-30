@@ -70,7 +70,7 @@ resource "aws_ec2_managed_prefix_list" "public_subnet_routes" {
 
   name           = "${local.name}-public-subnet-routes"
   address_family = "IPv4"
-  max_entries    = 10
+  max_entries    = 50
   tags           = local.tags
 
   dynamic "entry" {
