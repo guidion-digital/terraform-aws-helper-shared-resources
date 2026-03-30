@@ -7,6 +7,39 @@ resource "aws_eip" "redshift_public_ip" {
   domain = "vpc"
 }
 
+resource "aws_security_group" "redshift_networking_routes" {
+  for_each = (
+    var.vpc_config != null &&
+    length(var.public_subnet_prefix_list_entries) > 0
+  ) ? var.redshift_instances : {}
+
+  name        = "${lower(var.application_name)}-${each.key}-networking-routes"
+  description = "Allow Redshift access from networking routes"
+  vpc_id      = one(module.vpc).vpc_attributes.id
+  tags        = local.tags
+
+  dynamic "ingress" {
+    for_each = {
+      for route in var.public_subnet_prefix_list_entries : route.cidr => route
+    }
+
+    content {
+      from_port   = each.value.port
+      to_port     = each.value.port
+      protocol    = "tcp"
+      cidr_blocks = [ingress.value.cidr]
+      description = ingress.value.description
+    }
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 module "redshift" {
   source  = "terraform-aws-modules/redshift/aws"
   version = "7.1.0"
@@ -59,9 +92,10 @@ module "redshift" {
   vpc_id = one(module.vpc).vpc_attributes.id
 
   create_security_group = false
-  # Avoid passing an empty list to the Redshift ModifyCluster API on re-apply.
-  # An empty list is treated as an explicit update and Redshift rejects it.
-  vpc_security_group_ids = length(each.value.vpc_security_group_ids) > 0 ? each.value.vpc_security_group_ids : null
+  vpc_security_group_ids = concat(
+    coalesce(each.value.vpc_security_group_ids, []),
+    try([aws_security_group.redshift_networking_routes[each.key].id], [])
+  )
 
   create_subnet_group = each.value.create_subnet_group
   subnet_ids = each.value.subnet_ids != null ? each.value.subnet_ids : (
