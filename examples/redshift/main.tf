@@ -27,17 +27,23 @@ provider "aws" {
   region = "eu-central-1"
 }
 
+data "tfe_outputs" "networking" {
+  organization = "guidion"
+  workspace    = "networking"
+}
+
 module "shared_resources" {
   source = "../../"
 
   # Required variables
-  application_name               = var.application_name
-  namespace_supporting_resources = true
-  stage                          = var.stage
-  region                         = data.aws_region.current.region
-  account_id                     = data.aws_caller_identity.current.account_id
-  project                        = var.project
-  grafana_promtail_lambda_arn    = var.grafana_promtail_lambda_arn
+  application_name                  = var.application_name
+  namespace_supporting_resources    = true
+  stage                             = var.stage
+  region                            = data.aws_region.current.region
+  account_id                        = data.aws_caller_identity.current.account_id
+  project                           = var.project
+  grafana_promtail_lambda_arn       = var.grafana_promtail_lambda_arn
+  public_subnet_prefix_list_entries = data.tfe_outputs.networking.nonsensitive_values.tgw_attached_networks
 
   # Optional variables
   vpc_config = var.vpc_config
