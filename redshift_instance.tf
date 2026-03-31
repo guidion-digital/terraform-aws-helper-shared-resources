@@ -8,10 +8,7 @@ resource "aws_eip" "redshift_public_ip" {
 }
 
 resource "aws_security_group" "redshift_networking_routes" {
-  for_each = (
-    var.vpc_config != null &&
-    length(var.public_subnet_prefix_list_entries) > 0
-  ) ? var.redshift_instances : {}
+  for_each = var.vpc_config != null ? var.redshift_instances : {}
 
   name        = "${lower(var.application_name)}-${each.key}-networking-routes"
   description = "Allow Redshift access from networking routes"
@@ -20,7 +17,7 @@ resource "aws_security_group" "redshift_networking_routes" {
 
   dynamic "ingress" {
     for_each = {
-      for route in var.public_subnet_prefix_list_entries : route.cidr => route
+      for route in each.value.ingress_whitelist_cidrs : route.cidr => route
     }
 
     content {

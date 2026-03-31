@@ -368,7 +368,11 @@ variable "redshift_instances" {
     availability_zone                    = optional(string, null)
     availability_zone_relocation_enabled = optional(bool, null)
 
-    port                         = optional(number, 5439)
+    port = optional(number, 5439)
+    ingress_whitelist_cidrs = optional(list(object({
+      cidr        = string
+      description = optional(string, null)
+    })), [])
     preferred_maintenance_window = optional(string, "sat:10:00-sat:10:30")
 
     automated_snapshot_retention_period = optional(number, null)

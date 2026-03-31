@@ -56,6 +56,12 @@ module "shared_resources" {
       enhanced_vpc_routing   = true
       allow_version_upgrade  = false
       vpc_security_group_ids = []
+      ingress_whitelist_cidrs = [
+        {
+          cidr        = "10.0.0.0/8"
+          description = "Allow internal network access to Redshift"
+        }
+      ]
 
       # snapshot_arn = ""
       # owner_account = ""
