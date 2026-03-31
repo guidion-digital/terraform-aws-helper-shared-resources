@@ -60,6 +60,42 @@ module "shared_resources" {
         {
           cidr        = "10.0.0.0/8"
           description = "Allow internal network access to Redshift"
+        },
+        {
+          cidr        = "18.192.2.142/32"
+          description = "Metabase Cloud"
+        },
+        {
+          cidr        = "10.120.2.0/24"
+          description = "AWS Client VPN"
+        },
+        {
+          cidr        = "172.31.0.0/16"
+          description = "Redshift (Mailman)"
+        },
+        {
+          cidr        = "3.65.184.173/32"
+          description = "Metabase Cloud"
+        },
+        {
+          cidr        = "10.192.0.0/16"
+          description = "MWAA Airflow"
+        },
+        {
+          cidr        = "10.168.1.0/24"
+          description = "guidion-data-acceptance-ecs"
+        },
+        {
+          cidr        = "10.128.1.0/24"
+          description = "guidion-data-development-ecs"
+        },
+        {
+          cidr        = "10.208.0.0/24"
+          description = "guidion-data-production-powerbi-gateway"
+        },
+        {
+          cidr        = "18.184.191.58/32"
+          description = "Metabase Cloud"
         }
       ]
 
