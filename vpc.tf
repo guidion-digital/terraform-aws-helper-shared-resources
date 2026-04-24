@@ -15,10 +15,16 @@ data "aws_availability_zones" "current" {
 
 data "aws_ec2_transit_gateway" "this" {
   count = local.transit_gateway_enabled ? 1 : 0
-
   filter {
     name   = "state"
     values = ["available"]
+  }
+  dynamic "filter" {
+    for_each = var.transit_gateway_owner_id != null ? [var.transit_gateway_owner_id] : []
+    content {
+      name   = "owner-id"
+      values = [filter.value]
+    }
   }
 }
 

@@ -510,3 +510,9 @@ variable "ssm_parameters" {
 
   default = {}
 }
+
+variable "transit_gateway_owner_id" {
+  type        = string
+  default     = "123791438005"
+  description = "Optional AWS account ID that owns the Transit Gateway."
+}
