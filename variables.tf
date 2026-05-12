@@ -379,7 +379,7 @@ variable "redshift_instances" {
     manual_snapshot_retention_period    = optional(number, null)
     skip_final_snapshot                 = optional(bool, true)
     final_snapshot_identifier           = optional(string, null)
-    snapshot_arn                        = optional(string, null)
+    snapshot_identifier                 = optional(string, null)
     owner_account                       = optional(string, null)
 
     encrypted   = optional(bool, null)

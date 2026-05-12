@@ -79,7 +79,7 @@ module "redshift" {
   manual_snapshot_retention_period    = each.value.manual_snapshot_retention_period
   skip_final_snapshot                 = each.value.skip_final_snapshot
   final_snapshot_identifier           = each.value.final_snapshot_identifier
-  snapshot_arn                        = each.value.snapshot_arn
+  snapshot_identifier                 = each.value.snapshot_identifier
   owner_account                       = each.value.owner_account
 
   encrypted   = each.value.encrypted
