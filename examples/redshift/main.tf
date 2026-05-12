@@ -56,8 +56,9 @@ module "shared_resources" {
       enhanced_vpc_routing  = true
       allow_version_upgrade = false
 
-      # snapshot_identifier = "guidion-redshift-ra3-acceptance-test-cross-account-sharing"
-      # owner_account       = "813402095705"
+      snapshot_identifier = "guidion-redshift-ra3-acceptance-test-cross-account-sharing"
+      owner_account       = "813402095705"
+      master_username     = "guidion-bi-admin-acc"
 
       vpc_security_group_ids = []
       ingress_whitelist_cidrs = [

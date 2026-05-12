@@ -382,7 +382,7 @@ variable "redshift_instances" {
     snapshot_identifier                 = optional(string, null)
     owner_account                       = optional(string, null)
 
-    encrypted   = optional(bool, null)
+    encrypted   = optional(bool, false)
     kms_key_arn = optional(string, null)
     tags        = optional(map(string), {})
 
