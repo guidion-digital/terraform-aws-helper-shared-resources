@@ -50,11 +50,15 @@ module "shared_resources" {
 
   redshift_instances = {
     "example" = {
-      node_type              = "ra3.large"
-      number_of_nodes        = 1
-      publicly_accessible    = true
-      enhanced_vpc_routing   = true
-      allow_version_upgrade  = false
+      node_type             = "ra3.large"
+      number_of_nodes       = 1
+      publicly_accessible   = true
+      enhanced_vpc_routing  = true
+      allow_version_upgrade = false
+
+      # snapshot_identifier = "guidion-redshift-ra3-acceptance-test-cross-account-sharing"
+      # owner_account       = "813402095705"
+
       vpc_security_group_ids = []
       ingress_whitelist_cidrs = [
         {
@@ -98,9 +102,6 @@ module "shared_resources" {
           description = "Metabase Cloud"
         }
       ]
-
-      # snapshot_arn = ""
-      # owner_account = ""
     }
   }
 }
