@@ -1,5 +1,3 @@
-data "aws_caller_identity" "current" {}
-
 module "these_tags" {
   source  = "cloudposse/label/null"
   version = "0.25.0"
@@ -15,7 +13,6 @@ module "these_tags" {
     "application"     = var.application_name,
     "stage"           = var.stage,
     "shared_resource" = "true",
-    "deployed_by"     = data.aws_caller_identity.current.user_id
   }
 }
 
