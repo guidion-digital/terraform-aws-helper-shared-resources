@@ -87,6 +87,10 @@ module "shared_resources_x" {
       hash_key  = "id",
       range_key = "createdAt",
 
+      # Ministack doesn't implement Application Auto Scaling, so the scalable
+      # targets can't be created there. Defaults to true; omit in real usage.
+      autoscaling_enabled = false,
+
       global_secondary_indexes = [
         {
           name               = "createdAtIndex",
